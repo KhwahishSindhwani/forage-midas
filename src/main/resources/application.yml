@@ -12,6 +12,17 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: false
+  kafka:
+    consumer:
+      group-id: midas-core
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 general:
   kafka-topic: transactions
