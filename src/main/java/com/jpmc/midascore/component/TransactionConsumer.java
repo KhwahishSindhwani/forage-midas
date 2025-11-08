@@ -16,17 +16,14 @@ public class TransactionConsumer {
 
     @KafkaListener(topics = "${general.kafka-topic}", groupId = "midas-group")
     public void consume(Transaction transaction) {
-        // Update sender balance
         UserRecord sender = userRepository.findById(transaction.getSenderId());
-        if (sender != null) {
-            sender.setBalance(sender.getBalance() - transaction.getAmount());
-            userRepository.save(sender);
-        }
-
-        // Update recipient balance
         UserRecord recipient = userRepository.findById(transaction.getRecipientId());
-        if (recipient != null) {
+        
+        // Only process transaction if sender exists and has sufficient balance
+        if (sender != null && recipient != null && sender.getBalance() >= transaction.getAmount()) {
+            sender.setBalance(sender.getBalance() - transaction.getAmount());
             recipient.setBalance(recipient.getBalance() + transaction.getAmount());
+            userRepository.save(sender);
             userRepository.save(recipient);
         }
     }
