@@ -15,6 +15,9 @@ public class UserRecord {
     @Column(nullable = false)
     private float balance;
 
+    @Column(nullable = false)
+    private float incentive = 0.0f;
+
     protected UserRecord() {
     }
 
@@ -42,5 +45,13 @@ public class UserRecord {
 
     public void setBalance(float balance) {
         this.balance = balance;
+    }
+
+    public float getIncentive() {
+        return incentive;
+    }
+
+    public void setIncentive(float incentive) {
+        this.incentive = incentive;
     }
 }
