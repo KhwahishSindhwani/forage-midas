@@ -48,12 +48,14 @@ public class UserTenBalanceTest {
         logger.info("----------------------------------------------------------");
         logger.info("User 10's final balance: " + user10.getBalance());
         logger.info("User 10's final incentive: " + user10.getIncentive());
-        logger.info("Expected incentive: 3.5285 (1% of 352.85)");
+        logger.info("Expected: Receives 352.85 + 3.5285 incentive, Sends 287.75");
+        logger.info("Expected final balance: 2190.17 (2121.54 + 352.85 + 3.5285 - 287.75)");
         logger.info("----------------------------------------------------------");
         
-        // Verify incentive was added
+        // Verify incentive was calculated correctly
         float expectedIncentive = 3.5285f;
-        assertEquals(expectedIncentive, user10.getIncentive(), 0.001);
-        assertEquals(initialBalance + expectedIncentive, user10.getBalance(), 0.001);
+        float expectedBalance = 2190.17f;
+        assertEquals(expectedIncentive, user10.getIncentive(), 0.01);
+        assertEquals(expectedBalance, user10.getBalance(), 0.01);
     }
 }

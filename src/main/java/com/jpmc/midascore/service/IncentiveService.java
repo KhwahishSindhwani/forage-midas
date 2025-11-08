@@ -59,8 +59,13 @@ public class IncentiveService {
 
         float incentiveAmount = calculateIncentive(transaction);
 
-        // Get recipient
+        // Get sender and recipient
+        UserRecord sender = userRepository.findById(transaction.getSenderId());
         UserRecord recipient = userRepository.findById(transaction.getRecipientId());
+
+        // Process the transaction: deduct from sender, add to recipient
+        sender.setBalance(sender.getBalance() - transaction.getAmount());
+        recipient.setBalance(recipient.getBalance() + transaction.getAmount());
 
         // Update recipient's incentive field
         recipient.setIncentive(recipient.getIncentive() + incentiveAmount);
@@ -68,7 +73,8 @@ public class IncentiveService {
         // Add incentive to recipient's balance (not deducted from sender)
         recipient.setBalance(recipient.getBalance() + incentiveAmount);
 
-        // Save the updated recipient
+        // Save the updated users
+        userRepository.save(sender);
         userRepository.save(recipient);
 
         return new Incentive(incentiveAmount);
